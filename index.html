@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔱MAG🔥</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .container { text-align: center; width: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .active-view { display: flex; }
+        
+        .btn-mag { background-color: #ff4500; color: white; border: none; padding: 25px 45px; font-size: 28px; font-weight: bold; border-radius: 15px; cursor: pointer; box-shadow: 0 4px 20px rgba(255, 69, 0, 0.5); }
+        
+        .squares-container { display: flex; justify-content: center; gap: 8px; margin-top: 20px; width: 100%; padding: 0 10px; }
+        .square { width: 100px; height: 100px; background-color: #1e1e1e; border: 2px solid #ff4500; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.2s; text-align: center; padding: 5px; }
+
+        .grid-9-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 15px;
+        }
+        .grid-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+        .small-square {
+            width: 85px;
+            height: 85px;
+            background-color: #1e1e1e;
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+        }
+        
+        /* Botão Redondo de Girar (Spin) */
+        .spin-btn {
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s ease;
+        }
+        .spin-btn:active {
+            transform: scale(0.9);
+        }
+        /* Classe para animar o giro do botão */
+        .rotating {
+            transform: rotate(360deg);
+        }
+
+        .back-btn { margin-top: 20px; background: none; border: 1px solid #ffffff; color: white; padding: 10px 25px; border-radius: 8px; cursor: pointer; }
+        h2 { margin-bottom: 5px; font-size: 20px; }
+        p { color: #aaa; font-size: 13px; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <!-- Tela 1: Inicial -->
+    <div class="container active-view" id="homeView">
+        <button class="btn-mag" onclick="showView('catalogView')">🔱MAG🔥</button>
+    </div>
+
+    <!-- Tela 2: Menu com os 3 Provedores -->
+    <div class="container" id="catalogView">
+        <h2>Escolha um Provedor</h2>
+        <div class="squares-container">
+            <div class="square" onclick="showView('provAView')">Provedor A</div>
+            <div class="square" onclick="showView('provBView')">Provedor B</div>
+            <div class="square" onclick="showView('provCView')">Provedor C</div>
+        </div>
+        <button class="back-btn" onclick="showView('homeView')">Voltar</button>
+    </div>
+
+    <!-- Tela Estrutura Provedor A (Com Botão de Girar) -->
+    <div class="container" id="provAView">
+        <h2>Provedor A</h2>
+        <p>Gire para testar os itens:</p>
+        
+        <div class="grid-9-container">
+            <div class="grid-row">
+                <div class="small-square" id="sq1">Item 1</div>
+                <div class="small-square" id="sq2">Item 2</div>
+                <div class="small-square" id="sq3">Item 3</div>
+            </div>
+            <div class="grid-row">
+                <div class="small-square" id="sq4">Item 4</div>
+                <div class="small-square" id="sq5">Item 5</div>
+                <div class="small-square" id="sq6">Item 6</div>
+            </div>
+            <div class="grid-row">
+                <div class="small-square" id="sq7">Item 7</div>
+                <div class="small-square" id="sq8">Item 8</div>
+                <div class="small-square" id="sq9">Item 9</div>
+            </div>
+        </div>
+
+        <!-- Botão Redondo de Girar no lugar do Voltar -->
+        <button class="spin-btn" id="spinButton" onclick="girarSlot()">GIRAR</button>
+
+        <button class="back-btn" onclick="showView('catalogView')" style="margin-top: 10px; padding: 5px 15px; font-size: 12px;">← Voltar ao Menu</button>
+    </div>
+
+    <!-- Tela Estrutura Provedor B -->
+    <div class="container" id="provBView">
+        <h2>Painel do Provedor B</h2>
+        <p>Aqui fica a estrutura do Provedor B.</p>
+        <button class="back-btn" onclick="showView('catalogView')">Voltar</button>
+    </div>
+
+    <!-- Tela Estrutura Provedor C -->
+    <div class="container" id="provCView">
+        <h2>Painel do Provedor C</h2>
+        <p>Aqui fica a estrutura do Provedor C.</p>
+        <button class="back-btn" onclick="showView('catalogView')">Voltar</button>
+    </div>
+
+    <script>
+        function showView(viewId) {
+            const views = document.querySelectorAll('.container');
+            views.forEach(v => v.classList.remove('active-view'));
+            document.getElementById(viewId).classList.add('active-view');
+        }
+
+        function girarSlot() {
+            const btn = document.getElementById('spinButton');
+            btn.classList.add('rotating');
+
+            // Lista de possíveis conteúdos futuros (quando colocar imagens, entram aqui)
+            const opcoes = ['💎', '🔥', '777', '🍋', '⭐', '🍒', '💰', 'BAR', '🍀'];
+
+            // Efeito rápido de embaralhar
+            for(let i = 1; i <= 9; i++) {
+                const randomIndex = Math.floor(Math.random() * opcoes.length);
+                document.getElementById('sq' + i).innerText = opcoes[randomIndex];
+            }
+
+            // Remove a classe de rotação para permitir girar de novo
+            setTimeout(() => {
+                btn.classList.remove('rotating');
+            }, 400);
+        }
+    </script>
+
+</body>
+</html>
