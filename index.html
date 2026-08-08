@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔱MAG🔥</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; user-select: none; }
+        body { background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; position: relative; }
+        .container { text-align: center; width: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .active-view { display: flex; }
+        
+        .btn-mag { background-color: #ff4500; color: white; border: none; padding: 25px 45px; font-size: 28px; font-weight: bold; border-radius: 15px; cursor: pointer; box-shadow: 0 4px 20px rgba(255, 69, 0, 0.5); }
+        
+        .squares-container { display: flex; justify-content: center; gap: 8px; margin-top: 20px; width: 100%; padding: 0 10px; }
+        .square { width: 100px; height: 100px; background-color: #1e1e1e; border: 2px solid #ff4500; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.2s; text-align: center; padding: 5px; }
+
+        .grid-9-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 5px;
+        }
+        .grid-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+        .small-square {
+            width: 75px;
+            height: 75px;
+            background-color: #1e1e1e;
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+            padding: 5px;
+            overflow: hidden;
+        }
+        .small-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .dashboard-bar {
+            width: 92%;
+            max-width: 350px;
+            background-color: #1a1a1a;
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            margin: 8px auto 5px auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .dashboard-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .dashboard-box:not(:last-child) {
+            border-right: 1px solid #333;
+            margin-right: 4px;
+            padding-right: 4px;
+        }
+        .dashboard-icon {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .dashboard-value {
+            font-size: 13px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .spin-btn {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s ease;
+            margin-top: 2px;
+        }
+        .spin-btn:active { transform: scale(0.9); }
+        .rotating { transform: rotate(360deg); }
+
+        .floating-lua-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: rgba(30, 30, 30, 0.85);
+            border: 2px solid #ff4500;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 999;
+            touch-action: none;
+        }
+        .floating-lua-btn:active { cursor: grabbing; }
+
+        h2 { margin-bottom: 2px; font-size: 18px; }
+        p { color: #aaa; font-size: 11px; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="floating-lua-btn" id="luaBtn" onclick="showView('catalogView')" title="Voltar ao Menu">🏠</div>
+
+    <div class="container active-view" id="homeView">
+        <button class="btn-mag" onclick="showView('catalogView')">🔱MAG🔥</button>
+    </div>
+
+    <div class="container" id="catalogView">
+        <h2>Escolha um Provedor</h2>
+        <div class="squares-container">
+            <div class="square" onclick="showView('provAView')">Provedor A</div>
+            <div class="square" onclick="showView('provBView')">Provedor B</div>
+            <div class="square" onclick="showView('provCView')">Provedor C</div>
+        </div>
+    </div>
+
+    <div class="container" id="provAView">
+        <h2>Provedor A</h2>
+        <p>Aposta: R$ 0,50 | Tela Cheia = 10x</p>
+        
+        <div class="grid-9-container">
+            <div class="grid-row">
+                <div class="small-square" id="sq1"></div>
+                <div class="small-square" id="sq2"></div>
+                <div class="small-square" id="sq3"></div>
+            </div>
+            <div class="grid-row">
+                <div class="small-square" id="sq4"></div>
+                <div class="small-square" id="sq5"></div>
+                <div class="small-square" id="sq6"></div>
+            </div>
+            <div class="grid-row">
+                <div class="small-square" id="sq7"></div>
+                <div class="small-square" id="sq8"></div>
+                <div class="small-square" id="sq9"></div>
+            </div>
+        </div>
+
+        <div class="dashboard-bar">
+            <div class="dashboard-box">
+                <span class="dashboard-icon">💳</span>
+                <span class="dashboard-value" id="saldoDisplay">28.77</span>
+            </div>
+            <div class="dashboard-box">
+                <span class="dashboard-icon">💸</span>
+                <span class="dashboard-value" id="apostaDisplay">00.50</span>
+            </div>
+            <div class="dashboard-box">
+                <span class="dashboard-icon">🧧</span>
+                <span class="dashboard-value" id="ganhoDisplay" style="color: #ffcc00;">0.00</span>
+            </div>
+        </div>
+
+        <button class="spin-btn" id="spinButton" onclick="girarSlot()">GIRAR</button>
+    </div>
+
+    <div class="container" id="provBView">
+        <h2>Painel do Provedor B</h2>
+        <p>Estrutura do Provedor B.</p>
+    </div>
+
+    <div class="container" id="provCView">
+        <h2>Painel do Provedor C</h2>
+        <p>Estrutura do Provedor C.</p>
+    </div>
+
+    <script>
+        let saldoTotal = 28.77;
+        const valorAposta = 0.50;
+
+        // Imagens configuradas para o slot (incluindo a nova imagem no lugar do limão 🍋)
+        const imgNovaTroca = '<img src="14a23979-c5de-4013-be1c-eb7eec8c278c.png" alt="Nova Imagem">';
+        const imgNovoFogo = '<img src="1a0fcb85-626b-4e50-a371-32b9c5e2d875.png" alt="Novo Fogo">';
+        const imgNovo777 = '<img src="341b5a70-6b94-48d4-937b-33edd729029e.png" alt="Novo 777">';
+        const imgEstrelaNova = '<img src="97307bb3-9ddd-4862-9c5c-4482bef314d0.png" alt="Estrela Nova">';
+        const imgWildOnda = '<img src="wild_777_onda.gif" alt="Wild Onda">';
+        const imgNovoLimao = '<img src="ffadc725-bc9e-4167-9e02-c03c25c07c42.png" alt="Novo Limao">';
+
+        const valoresSimbolos = {
+            [imgNovaTroca]: 13.00,
+            [imgNovoFogo]: 3.00,
+            [imgWildOnda]: 8.00, // Wild coringa com valor de R$ 8,00
+            [imgNovo777]: 1.50,
+            [imgNovoLimao]: 0.50, // Substitui o antigo 🍋 mantendo o valor de 0,50
+            [imgEstrelaNova]: 0.30,
+            '🍒': 0.20
+        };
+
+        // Array de opções ponderado para manter a dificuldade da imagem Wild 'wild_777_onda.gif'
+        const opcoes = [
+            imgNovaTroca, imgNovoFogo, imgNovo777, imgNovoLimao, imgEstrelaNova, '🍒',
+            imgNovoLimao, imgEstrelaNova, '🍒', imgNovo777, 
+            imgWildOnda
+        ];
+
+        // Inicializa o grid com alguns símbolos de exemplo
+        window.onload = function() {
+            const iniciais = [imgNovaTroca, imgNovaTroca, imgNovaTroca, '🍒', '🍒', imgNovoFogo, imgNovo777, imgEstrelaNova, imgEstrelaNova];
+            for(let i = 1; i <= 9; i++) {
+                document.getElementById('sq' + i).innerHTML = iniciais[i-1];
+            }
+        };
+
+        function showView(viewId) {
+            const views = document.querySelectorAll('.container');
+            views.forEach(v => v.classList.remove('active-view'));
+            document.getElementById(viewId).classList.add('active-view');
+            
+            const lua = document.getElementById('luaBtn');
+            if(viewId === 'homeView') {
+                lua.style.display = 'none';
+            } else {
+                lua.style.display = 'flex';
+            }
+        }
+
+        function girarSlot() {
+            if (saldoTotal < valorAposta) {
+                alert("Saldo insuficiente!");
+                return;
+            }
+
+            document.getElementById('ganhoDisplay').innerText = "0.00";
+            document.getElementById('ganhoDisplay').style.color = "#ffcc00";
+
+            saldoTotal -= valorAposta;
+            document.getElementById('saldoDisplay').innerText = saldoTotal.toFixed(2);
+
+            const btn = document.getElementById('spinButton');
+            btn.classList.add('rotating');
+
+            let valoresGrid = [];
+
+            for(let i = 1; i <= 9; i++) {
+                const randomIndex = Math.floor(Math.random() * opcoes.length);
+                const simbolo = opcoes[randomIndex];
+                valoresGrid[i] = simbolo;
+                document.getElementById('sq' + i).innerHTML = simbolo;
+            }
+
+            let premioTotal = 0;
+
+            function checarLinha(p1, p2, p3) {
+                let s1 = valoresGrid[p1];
+                let s2 = valoresGrid[p2];
+                let s3 = valoresGrid[p3];
+
+                let isWild1 = (s1 === imgWildOnda);
+                let isWild2 = (s2 === imgWildOnda);
+                let isWild3 = (s3 === imgWildOnda);
+
+                let simboloBase = null;
+
+                // Identifica se há combinação válida considerando o Wild que combina com tudo se houver pelo menos 2 iguais ou coringas compatíveis
+                if (!isWild1) simboloBase = s1;
+                else if (!isWild2) simboloBase = s2;
+                else if (!isWild3) simboloBase = s3;
+                else {
+                    // Três wilds na linha
+                    return valoresSimbolos[imgWildOnda];
+                }
+
+                // Verifica se todos os símbolos da linha combinam com o simboloBase (diretamente ou via wild)
+                let match1 = isWild1 || (s1 === simboloBase);
+                let match2 = isWild2 || (s2 === simboloBase);
+                let match3 = isWild3 || (s3 === simboloBase);
+
+                if (match1 && match2 && match3) {
+                    return valoresSimbolos[simboloBase] || 0.00;
+                }
+
+                return 0;
+            }
+
+            // 1. Linha Superior (1, 2, 3)
+            premioTotal += checarLinha(1, 2, 3);
+            // 2. Linha Central (4, 5, 6)
+            premioTotal += checarLinha(4, 5, 6);
+            // 3. Linha Inferior (7, 8, 9)
+            premioTotal += checarLinha(7, 8, 9);
+            // 4. Diagonal Principal (1, 5, 9)
+            premioTotal += checarLinha(1, 5, 9);
+            // 5. Diagonal Secundária (7, 5, 3)
+            premioTotal += checarLinha(7, 5, 3);
+
+            // Verificação de Tela Cheia (Multiplicador 10x)
+            let telaCheia = true;
+            let primeiroSimboloEfetivo = valoresGrid[1] === imgWildOnda ? null : valoresGrid[1];
+            
+            for(let i = 2; i <= 9; i++) {
+                let atual = valoresGrid[i];
+                if (atual !== imgWildOnda) {
+                    if (primeiroSimboloEfetivo === null) {
+                        primeiroSimboloEfetivo = atual;
+                    } else if (atual !== primeiroSimboloEfetivo) {
+                        telaCheia = false;
+                        break;
+                    }
+                }
+            }
+
+            if (telaCheia) {
+                let simboloTela = primeiroSimboloEfetivo || imgWildOnda;
+                const valorBaseTela = valoresSimbolos[simboloTela] || 0.50;
+                premioTotal = (premioTotal > 0 ? premioTotal : valorBaseTela) * 10;
+            }
+
+            if (premioTotal > 0) {
+                saldoTotal += premioTotal;
+                document.getElementById('ganhoDisplay').innerText = premioTotal.toFixed(2);
+                document.getElementById('ganhoDisplay').style.color = '#00ff66';
+            } else {
+                document.getElementById('ganhoDisplay').innerText = "0.00";
+                document.getElementById('ganhoDisplay').style.color = '#ffcc00';
+            }
+
+            document.getElementById('saldoDisplay').innerText = saldoTotal.toFixed(2);
+
+            setTimeout(() => {
+                btn.classList.remove('rotating');
+            }, 400);
+        }
+
+        const lua = document.getElementById('luaBtn');
+        let isDragging = false;
+        let startX, startY;
+
+        lua.addEventListener('pointerdown', (e) => {
+            isDragging = true;
+            startX = e.clientX - lua.offsetLeft;
+            startY = e.clientY - lua.offsetTop;
+            lua.setPointerCapture(e.pointerId);
+        });
+
+        lua.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            lua.style.left = (e.clientX - startX) + 'px';
+            lua.style.top = (e.clientY - startY) + 'px';
+            lua.style.right = 'auto';
+        });
+
+        lua.addEventListener('pointerup', (e) => {
+            isDragging = false;
+            const rect = lua.getBoundingClientRect();
+            const middle = window.innerWidth / 2;
+            if (rect.left + rect.width / 2 < middle) {
+                lua.style.left = '15px';
+            } else {
+                lua.style.left = (window.innerWidth - rect.width - 15) + 'px';
+            }
+        });
+    </script>
+
+</body>
+</html>
